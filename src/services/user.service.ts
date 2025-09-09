@@ -1,4 +1,4 @@
-import UserModel, { IUser } from "../models/User.model";
+import UserModel, { IUser } from "../models/user.model";
 
 class UserService {
   async createUser(name: string, email: string): Promise<IUser> {
