@@ -75,6 +75,60 @@ class AuthController {
       return res.status(401).json({ error: "Invalid token" });
     }
   }
+
+  async forgotPassword(req: Request, res: Response) {
+    try {
+      const { email } = req.body;
+      await this.authService.forgotPassword(email);
+      res.json({ message: "Password reset code sent to email" });
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  }
+
+  async verifyToken(req: Request, res: Response) {
+    try {
+      const { email, resetCode } = req.body;
+
+      if (!email || !resetCode) {
+        return res
+          .status(400)
+          .json({ error: "Email and reset code are required" });
+      }
+
+      const result = await this.authService.verifyToken(email, resetCode);
+
+      if (!result.success) {
+        return res.status(400).json({ error: result.message });
+      }
+
+      res.json({ message: "Code verified successfully" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Server error" });
+    }
+  }
+
+  async resetPassword(req: Request, res: Response) {
+    try {
+      const { email, newPassword } = req.body;
+
+      if (!email || !newPassword) {
+        return res
+          .status(400)
+          .json({ error: "Email, reset code and new password are required" });
+      }
+
+      const result = await this.authService.resetPassword(email, newPassword);
+
+      if (!result.success) {
+        return res.status(400).json({ error: result.message });
+      }
+
+      res.json({ message: "Password reset successful" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Server error" });
+    }
+  }
 }
 
 export default AuthController;

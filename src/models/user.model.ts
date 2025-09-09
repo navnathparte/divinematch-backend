@@ -18,6 +18,8 @@ export interface IUser extends Document {
   media?: string[];
   profileVisibility?: string;
   onlineStatus?: string;
+  resetCode: string | undefined;
+  resetCodeExpiry: Date | undefined;
 }
 
 const userSchema: Schema = new Schema(
@@ -51,6 +53,8 @@ const userSchema: Schema = new Schema(
     media: [{ type: String }], // gallery
     profileVisibility: { type: String, default: "Everyone" },
     onlineStatus: { type: String, default: "Visible" },
+    resetCode: { type: String },
+    resetCodeExpiry: { type: Date },
   },
   { timestamps: true, versionKey: false }
 );
