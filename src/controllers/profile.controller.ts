@@ -17,11 +17,7 @@ export default class ProfileController {
       }
       res.json({
         message: "successful",
-        user: {
-          id: user._id,
-          username: user.name,
-          email: user.email,
-        },
+        user
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch users" });
@@ -30,12 +26,9 @@ export default class ProfileController {
 
   async updateProfile(req: any, res: any): Promise<any> {
     try {
-      const { name, bio } = req.body;
+      const data = req.body;
       const userDetails = req.user;
-      const user = await this.userService.updateUser(userDetails.id, {
-        name,
-        bio,
-      });
+      const user = await this.userService.updateUser(userDetails.id, data);
 
       res.json({
         message: "success",
