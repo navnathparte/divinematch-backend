@@ -9,16 +9,18 @@ const router = Router();
 const userService = new UserService();
 const userController = new UserController(userService);
 
-router.get("/profile", AuthMiddleware.verifyToken, (req, res) =>
-  userController.getProfile(req, res)
+router.get("/profile", AuthMiddleware.verifyToken, userController.getProfile);
+
+router.put(
+  "/profile",
+  AuthMiddleware.verifyToken,
+  userController.updateProfile
 );
 
-router.put("/profile", AuthMiddleware.verifyToken, (req, res) =>
-  userController.updateProfile(req, res)
-);
-
-router.put("/profile/password", AuthMiddleware.verifyToken, (req, res) =>
-  userController.changePassword(req, res)
+router.put(
+  "/profile/password",
+  AuthMiddleware.verifyToken,
+  userController.changePassword
 );
 
 export default router;

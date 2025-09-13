@@ -12,13 +12,17 @@ const authService = new AuthService();
 const profileController = new ProfileController(userService, authService);
 
 // Get profile
-router.get("/getProfile", AuthMiddleware.verifyToken, (req, res) =>
-  profileController.getProfile(req, res)
+router.get(
+  "/getProfile",
+  AuthMiddleware.verifyToken,
+  profileController.getProfile
 );
 
 // Update profile
-router.put("/updateProfile", AuthMiddleware.verifyToken, (req, res) =>
-  profileController.updateProfile(req, res)
+router.put(
+  "/updateProfile",
+  AuthMiddleware.verifyToken,
+  profileController.updateProfile
 );
 
 export default router;

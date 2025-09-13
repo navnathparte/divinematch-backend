@@ -7,7 +7,7 @@ export default class ProfileController {
     private authService = new AuthService()
   ) {}
 
-  async getProfile(req: any, res: any): Promise<any> {
+  getProfile = async (req: any, res: any): Promise<any> => {
     try {
       const userDetails = req.user;
       const user = await this.userService.getUserById(userDetails.id);
@@ -17,14 +17,14 @@ export default class ProfileController {
       }
       res.json({
         message: "successful",
-        user
+        user,
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch users" });
     }
-  }
+  };
 
-  async updateProfile(req: any, res: any): Promise<any> {
+  updateProfile = async (req: any, res: any): Promise<any> => {
     try {
       const data = req.body;
       const userDetails = req.user;
@@ -37,5 +37,5 @@ export default class ProfileController {
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch user" });
     }
-  }
+  };
 }

@@ -8,16 +8,16 @@ export default class UserController {
     private authService = new AuthService()
   ) {}
 
-  async getUsers(req: any, res: Response): Promise<void> {
+  getUsers = async (req: any, res: Response): Promise<void> => {
     try {
       const users = await this.userService.getUsers();
       res.json({ message: "successfully Users fetched!!!", data: users });
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch users" });
     }
-  }
+  };
 
-  async getProfile(req: any, res: Response): Promise<void> {
+  getProfile = async (req: any, res: Response): Promise<void> => {
     try {
       const userDetails = req.user;
       const user = await this.userService.getUserById(userDetails.id);
@@ -36,9 +36,9 @@ export default class UserController {
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch users" });
     }
-  }
+  };
 
-  async updateProfile(req: any, res: Response): Promise<void> {
+  updateProfile = async (req: any, res: Response): Promise<void> => {
     try {
       const { name, bio } = req.body;
       const userDetails = req.user;
@@ -51,7 +51,7 @@ export default class UserController {
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch user" });
     }
-  }
+  };
 
   async changePassword(req: any, res: Response): Promise<any> {
     try {
@@ -75,7 +75,7 @@ export default class UserController {
     }
   }
 
-  async getUserById(req: any, res: Response): Promise<void> {
+  getUserById = async (req: any, res: Response): Promise<void> => {
     try {
       const user = await this.userService.getUserById(req.params.id);
       if (!user) {
@@ -86,9 +86,9 @@ export default class UserController {
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch user" });
     }
-  }
+  };
 
-  async updateUser(req: any, res: Response): Promise<void> {
+  updateUser = async (req: any, res: Response): Promise<void> => {
     try {
       const user = await this.userService.updateUser(req.params.id, req.body);
       if (!user) {
@@ -99,9 +99,9 @@ export default class UserController {
     } catch (error) {
       res.status(400).json({ error: "Failed to update user" });
     }
-  }
+  };
 
-  async deleteUser(req: any, res: Response): Promise<void> {
+  deleteUser = async (req: any, res: Response): Promise<void> => {
     try {
       const user = await this.userService.deleteUser(req.params.id);
       if (!user) {
@@ -112,5 +112,5 @@ export default class UserController {
     } catch (error) {
       res.status(500).json({ error: "Failed to delete user" });
     }
-  }
+  };
 }
