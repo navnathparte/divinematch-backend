@@ -4,17 +4,17 @@ import User, { IUser } from "../models/user.model";
 import { transporter } from "../utils/enum/mailer";
 
 class AuthService {
-  async register(
+  register = async (
     name: string,
     email: string,
     password: string
-  ): Promise<IUser> {
+  ): Promise<any> => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, password: hashedPassword });
     return user;
-  }
+  };
 
-  async login(email: string, password: string): Promise<any> {
+  login = async (email: string, password: string): Promise<any> => {
     const user = await User.findOne({ email }).lean();
     if (!user) return null;
 
@@ -29,13 +29,13 @@ class AuthService {
     );
 
     return { token, user };
-  }
+  };
 
-  async changePassword(
+  changePassword = async (
     user: any,
     oldPassword: string,
     newPassword: string
-  ): Promise<any> {
+  ): Promise<any> => {
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
       throw new Error("Old password is incorrect");
@@ -44,9 +44,9 @@ class AuthService {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
     await user.save();
-  }
+  };
 
-  async forgotPassword(email: string) {
+  forgotPassword = async (email: string) => {
     const user = await User.findOne({ email });
     if (!user) throw new Error("User not found");
 
@@ -67,9 +67,9 @@ class AuthService {
     });
 
     return { success: true, message: "Reset code sent to email" };
-  }
+  };
 
-  async verifyToken(email: string, resetCode: string) {
+  verifyToken = async (email: string, resetCode: string) => {
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -96,9 +96,9 @@ class AuthService {
     await user.save();
 
     return { success: true };
-  }
+  };
 
-  async resetPassword(email: string, newPassword: string) {
+  resetPassword = async (email: string, newPassword: string) => {
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -110,8 +110,8 @@ class AuthService {
     user.password = hashedPassword;
     await user.save();
 
-    return { success: true, message:"Password Updated Successfully" };
-  }
+    return { success: true, message: "Password Updated Successfully" };
+  };
 }
 
 export default AuthService;
