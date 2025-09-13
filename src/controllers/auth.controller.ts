@@ -8,9 +8,9 @@ interface JwtPayload {
 }
 
 class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  async test(req: any, res: Response) {
+  test = (req: any, res: Response) => {
     try {
       res.status(200).json({ message: "auth test successfully" });
     } catch (error: any) {
@@ -18,23 +18,26 @@ class AuthController {
         .status(400)
         .json({ error: "Registration failed", message: error.message });
     }
-  }
+  };
 
-  async register(req: any, res: Response) {
+  register = async (req: any, res: Response) => {
     try {
       const { username: name, email, password } = req.body;
       console.log({ body: req.body });
-
-      const user = await this.authService.register(name, email, password);
-      res
-        .status(201)
-        .json({ message: "User registered successfully", data: user });
+      try {
+        const user = await this.authService.register(name, email, password);
+        res
+          .status(201)
+          .json({ message: "User registered successfully", data: user });
+      } catch (error) {
+        console.log(error);
+      }
     } catch (error) {
       res.status(400).json({ error: "Registration failed" });
     }
-  }
+  };
 
-  async login(req: any, res: Response) {
+  login = async (req: any, res: Response) => {
     try {
       const { email, password } = req.body;
       console.log("req.body", req.body);
@@ -55,9 +58,9 @@ class AuthController {
     } catch (error) {
       res.status(400).json({ error: "Login failed" });
     }
-  }
+  };
 
-  auth(req: any, res: Response, next: NextFunction) {
+  auth = async (req: any, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -74,9 +77,9 @@ class AuthController {
     } catch (error) {
       return res.status(401).json({ error: "Invalid token" });
     }
-  }
+  };
 
-  async forgotPassword(req: Request, res: Response) {
+  forgotPassword = async (req: Request, res: Response) => {
     try {
       const { email } = req.body;
       await this.authService.forgotPassword(email);
@@ -84,9 +87,9 @@ class AuthController {
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
-  }
+  };
 
-  async verifyToken(req: Request, res: Response) {
+  verifyToken = async (req: Request, res: Response) => {
     try {
       const { email, resetCode } = req.body;
 
@@ -106,9 +109,9 @@ class AuthController {
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Server error" });
     }
-  }
+  };
 
-  async resetPassword(req: Request, res: Response) {
+  resetPassword = async (req: Request, res: Response) => {
     try {
       const { email, newPassword } = req.body;
 
@@ -128,7 +131,7 @@ class AuthController {
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Server error" });
     }
-  }
+  };
 }
 
 export default AuthController;
